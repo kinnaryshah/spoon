@@ -1,0 +1,23 @@
+Package: spoon
+Title: Address the Mean-variance Relationship in Spatial Transcriptomics Data
+Version: 0.0.0.9000
+Authors@R: c(
+    person(given = "Kinnary",
+           family = "Shah",
+           role = c("aut", "cre"),
+           email = "kinnaryshahh@gmail.com",
+           comment = c(ORCID = "0000-0001-7098-2116")),
+    person("Boyi", "Guo",
+           email = "boyi.guo.work@gmail.com",
+           role = c("aut"),
+           comment = c(ORCID = "0000-0003-2950-2349")),
+    person("Stephanie C.", "Hicks", 
+           email = "shicks19@jhu.edu", 
+           role = c("aut"), 
+           comment = c(ORCID = "0000-0002-7858-0231")))
+Description: This package uses Empirical Bayes techniques to address the mean-variance relationship in spatially resolved transcriptomics data. Precision weights are generated for individual observations, which can be used to rescale the data and covariates used as input in spatially variable gene detection tools.
+Imports: SpatialExperiment, BRISC, nnSVG, purrr, scuttle, BiocParallel
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
