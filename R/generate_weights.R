@@ -5,6 +5,8 @@
 #' @details This function generates weights for each observation, which are used as input to scale the data and covariates
 
 #' @param spe SpatialExperiment object, contains a raw counts matrix to generate weights from
+#' @param n_threads default = 1, number of threads for parallelization
+#' @param BPPARAM optional additional argument for parallelization to use BiocParallel
 #'
 #' @return list of s_g, r_tilda, lambda_hat, and weights matrix
 #'
@@ -18,7 +20,12 @@
 #' @examples
 #' generate_weights(spe)
 #'
-generate_weights <- function(spe){
+generate_weights <- function(spe, n_threads = 1, BPPARAM = NULL){
+
+  if (is.null(BPPARAM)) {
+    BPPARAM <- MulticoreParam(workers = n_threads)
+  }
+
   spe <- spe[, colSums(counts(spe)) > 0]
   dim(spe)
 
@@ -80,7 +87,7 @@ generate_weights <- function(spe){
     residual_i <- y_i - pred_i$prediction
 
     return(list(pred_i$prediction, residual_i))
-  }, BPPARAM = MulticoreParam(workers = 20))
+  }, BPPARAM = BPPARAM)
 
   # collapse output list into matrix
   mat_brisc <- do.call("rbind", out_brisc)
