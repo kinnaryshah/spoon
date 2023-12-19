@@ -1,6 +1,6 @@
 #sub function for weighted_nnSVG()
 
-weighted_nnSVG_calc <- function(spe, i){
+weighted_nnSVG_calc <- function(spe, w, i){
   res = tryCatch({
     print(i)
     weight_output_i <- nnSVG(spe[i,], X=matrix(w[,i]), assay_name = "weighted_logcounts")

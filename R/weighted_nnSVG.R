@@ -36,7 +36,7 @@ weighted_nnSVG <- function(input, assay_name = "logcounts", w){
   )
   print("before running")
   #run nnSVG with covariate
-  weighted_nnSVG_list <- map(.x=c(1:dim(spe)[1]), .f=~weighted_nnSVG_calc(spe,.x))
+  weighted_nnSVG_list <- map(.x=c(1:dim(spe)[1]), .f=~weighted_nnSVG_calc(spe, w, .x))
 
   #need to manually calculate mean for weighted nnSVG
   weighted_mean <- rowMeans(weighted_logcounts)
