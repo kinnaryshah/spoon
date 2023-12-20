@@ -10,46 +10,54 @@ library(scuttle)
 library(purrr)
 
 # load example dataset from STexampleData package
-spe <- Visium_humanDLPFC()
-dim(spe)
+  spe <- Visium_humanDLPFC()
+  dim(spe)
 
-# keep spots over tissue
-spe <- spe[, colData(spe)$in_tissue == 1]
-dim(spe)
+  # keep spots over tissue
+  spe <- spe[, colData(spe)$in_tissue == 1]
+  dim(spe)
 
-# filter low-expressed and mitochondrial genes
-# using function from nnSVG package with default filtering parameters
-spe <- filter_genes(spe)
+  # filter low-expressed and mitochondrial genes
+  # using function from nnSVG package with default filtering parameters
+  spe <- filter_genes(spe)
 
-# calculate logcounts (log-transformed normalized counts) using scran package
-# using library size factors
-spe <- computeLibraryFactors(spe)
-spe <- logNormCounts(spe)
-assayNames(spe)
+  # calculate logcounts (log-transformed normalized counts) using scran package
+  # using library size factors
+  spe <- computeLibraryFactors(spe)
+  spe <- logNormCounts(spe)
+  assayNames(spe)
 
-# select small set of random genes and several known SVGs for faster runtime in this example workflow
-set.seed(123)
-#ix_random <- sample(seq_len(nrow(spe)), 10)
-known_genes <- c("MOBP", "PCP4", "SNAP25", "HBB", "IGKC", "NPY")
-ix_known <- which(rowData(spe)$gene_name %in% known_genes)
-ix <- c(ix_known)
+  known_genes <- c("MOBP", "PCP4", "SNAP25", "HBB", "IGKC", "NPY")
+  ix_known <- which(rowData(spe)$gene_name %in% known_genes)
+  ix <- c(ix_known)
 
-spe <- spe[ix, ]
-dim(spe)
+  spe <- spe[ix, ]
+  dim(spe)
 
-
-spe <- spe[, colSums(logcounts(spe)) > 0]
+  spe <- spe[, colSums(logcounts(spe)) > 0]
 
 # run nnSVG using a single thread for this example workflow
-set.seed(123)
-spe <- nnSVG(spe, n_threads = 1)
+#set.seed(123)
+#spe <- nnSVG(spe, n_threads = 1)
 
 # show results
-rowData(spe)
+#rowData(spe)
 
 #make sure running weighted after and before nnSVG returns the same output!!
 #currently something is hardcoded from nnSVG output
 
-weights <- generate_weights(spe, 1, NULL)
-weights_new <- stabilize_weights(weights)
-spe <- weighted_nnSVG(spe, "logcounts", weights_new) #this runs but gives warnings for each gene, zero row/col sums
+set.seed(1)
+weights <- generate_weights(input = spe, stabilize = TRUE, n_threads = 1, BPPARAM = NULL)
+spe <- weighted_nnSVG(spe, w=weights)
+rowData(spe)
+
+#verify that using counts matrix and coords matrix input gives same output as spe object
+
+counts_mat <- counts(spe)
+logcounts_mat <- logcounts(spe)
+coords_mat <- spatialCoords(spe)
+
+set.seed(1)
+weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, n_threads = 1, BPPARAM = NULL)
+results <- weighted_nnSVG(logcounts_mat, coords_mat, w = weights_2)
+
