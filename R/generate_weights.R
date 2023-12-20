@@ -22,6 +22,7 @@
 #'
 generate_weights <- function(input, spatial_coords = NULL,
                              assay_name = "logcounts",
+                             stabilize = TRUE,
                              n_threads = 1, BPPARAM = NULL){
 
   if (is(input, "SpatialExperiment")) {
@@ -145,5 +146,48 @@ generate_weights <- function(input, spatial_coords = NULL,
 
   w <- tmp_pred_sqrt_sg^(-4)
 
-  return(list(s_g, r_tilda, lambda_hat, w))
+  if(stabilize){
+    y_bar <- r_tilda
+
+    max_ybar <- max(y_bar)
+    min_ybar <- min(y_bar)
+
+    s_g_max_ybar <- predict(spline_fit, x=max_ybar)$y
+    s_g_min_ybar <- predict(spline_fit, x=min_ybar)$y
+
+    #this matrix has same dimensions of lambda_hat
+    tmp_pred_sqrt_sg <- predict(
+      spline_fit,
+      x = c(lambda_hat)
+    )$y |>
+      matrix(
+        nrow = n, ncol = G
+      )
+
+    #constrain individual observation weights that have lambda hat more extreme than range of r_tilda
+    count_changes <- 0
+    for (i in 1:nrow(lambda_hat)) {
+      print(i)
+      for (j in 1:ncol(lambda_hat)) {
+        print(j)
+        #if this observation is greater than the max_ybar, change the weight matrix
+        if(lambda_hat[i,j] > max_ybar){
+          count_changes <- count_changes + 1
+          tmp_pred_sqrt_sg[i,j] <- s_g_max_ybar
+        }
+        #if this observation is less than the min_ybar, change the weight matrix
+        if(lambda_hat[i,j] < min_ybar){
+          count_changes <- count_changes + 1
+          tmp_pred_sqrt_sg[i,j] <- s_g_min_ybar
+        }
+      }
+    }
+
+    print(count_changes/(n*G))
+
+    w <- tmp_pred_sqrt_sg^(-4)
+
+  }
+
+  return(w)
 }
