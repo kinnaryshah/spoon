@@ -20,24 +20,34 @@
 #' @examples
 #' generate_weights(spe)
 #'
-generate_weights <- function(spe, n_threads = 1, BPPARAM = NULL){
+generate_weights <- function(input, spatial_coords = NULL,
+                             assay_name = "logcounts",
+                             n_threads = 1, BPPARAM = NULL){
+
+  if (is(input, "SpatialExperiment")) {
+    spe <- input
+    stopifnot(assay_name %in% assayNames(spe))
+  }
 
   if (is.null(BPPARAM)) {
     BPPARAM <- MulticoreParam(workers = n_threads)
   }
 
-  spe <- spe[, colSums(counts(spe)) > 0]
-  dim(spe)
-
-  spe <- logNormCounts(spe)
-
   #calculate weights
 
   # Count Matrix, transpose so each row is a spot, and each column is a gene
-  r <- t(as.matrix(counts(spe)))
+  if (is(input, "SpatialExperiment")) {
+    r <- t(as.matrix(counts(spe)))
+    coords <- spatialCoords(spe)
 
-  n <- dim(spe)[2] # Number of Cells
-  G <- dim(spe)[1] # Number of Genes
+  } else {
+    r <- t(as.matrix(input))
+    coords <- spatial_coords
+    row_names <- rownames(input)
+  }
+
+  n <- dim(r)[1] # Number of Cells
+  G <- dim(r)[2] # Number of Genes
 
   # Sample-specific Library Size
   R <- rowSums(r)
@@ -51,8 +61,6 @@ generate_weights <- function(spe, n_threads = 1, BPPARAM = NULL){
 
   # logCPM
   y <- log2(r+0.5) - log2(tmp_R_mat+1) + log2(10^6)
-
-  coords <- spatialCoords(spe)
 
   # scale coordinates proportionally
   range_all <- max(apply(coords, 2, function(col) diff(range(col))))
