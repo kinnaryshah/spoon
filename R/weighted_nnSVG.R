@@ -57,6 +57,9 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
     weighted_prop_sv = unlist(lapply(weighted_nnSVG_list, function (x) x[c('weighted_prop_sv')]))
   )
 
+  res <- cbind(res,
+               weighted_rank = rank(-1*results[,"weighted_LR_stat"]))
+
   if (is(input, "SpatialExperiment")) {
     # return in rowData of spe object
     stopifnot(nrow(spe) == nrow(res))
