@@ -8,14 +8,16 @@
 #' @param spatial_coords matrix containing columns of spatial coordinates, needed if input is a matrix
 #' @param assay_name if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored
 #' @param w weights matrix
-#'
+#' @param BPPARAM optional additional argument for parallelization to use BiocParallel
+
 #' @return either spe with weighted nnSVG statistics, or matrix with weighted nnSVG statistics
 #'
 #' @import SpatialExperiment
 #' @import nnSVG
 #' @import purrr
 #' @import scuttle
-#'
+#' @import BiocParallel
+
 #' @export
 #'
 #' @examples
@@ -24,7 +26,8 @@
 #' weighted_nnSVG(logcounts_mat, coords_mat, w=weights)
 #'
 weighted_nnSVG <- function(input, spatial_coords = NULL,
-                           assay_name = "logcounts", w){
+                           assay_name = "logcounts", w,
+                           BPPARAM = NULL){
 
   # Make sure nnSVG fixed the interceptless model
   stopifnot(
@@ -37,32 +40,48 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
     stopifnot(assay_name %in% assayNames(spe))
   }
 
-  #compute weighted logcounts matrix and run nnSVG with covariate
   if(is(input, "SpatialExperiment")) {
     weighted_logcounts <- t(w)*logcounts(spe)
     assay(spe, "weighted_logcounts") <- weighted_logcounts
     weighted_mean <- rowMeans(weighted_logcounts)
-    G <- dim(spe)[1]
-    weighted_nnSVG_list <- map(.x=c(1:G), .f=~weighted_nnSVG_calc_spe(spe, w, .x))
   }
   else{
     weighted_logcounts_mat <- t(w)*input
     weighted_mean <- rowMeans(weighted_logcounts_mat)
-    G <- dim(input)[1]
-    weighted_nnSVG_list <- map(.x=c(1:G), .f=~weighted_nnSVG_calc_mat(weighted_logcounts_mat, spatial_coords, w, .x))
   }
+
+  #compute weighted logcounts matrix and run nnSVG with covariate
+  #runs using parallelization
+  ix <- seq_len(dim(spe)[1])
+  output <- bplapply(ix, function(i) {
+
+  #note that putting seed here is the only way the results are replicated
+  #set.seed(1)
+    if(is(input, "SpatialExperiment")) {
+      weighted_nnSVG_i <- weighted_nnSVG_calc_spe(spe, w, i)
+    }
+    else{
+      weighted_nnSVG_i <- weighted_nnSVG_calc_mat(weighted_logcounts_mat, spatial_coords, w, i)
+    }
+
+    weighted_nnSVG_i
+
+  })#, BPPARAM = BPPARAM)
+
+  # collapse output list into matrix
+  weighted_nnSVG_output <- do.call("rbind", output)
 
   #return spe with weighted nnSVG params added to it
   res <- cbind(
     weighted_mean,
-    weighted_LR_stat = unlist(lapply(weighted_nnSVG_list, function (x) x[c('weighted_LR_stat')])),
-    weighted_sigma.sq = unlist(lapply(weighted_nnSVG_list, function (x) x[c('weighted_sigma.sq')])),
-    weighted_tau.sq = unlist(lapply(weighted_nnSVG_list, function (x) x[c('weighted_tau.sq')])),
-    weighted_prop_sv = unlist(lapply(weighted_nnSVG_list, function (x) x[c('weighted_prop_sv')]))
+    weighted_LR_stat = unlist(weighted_nnSVG_output[,"weighted_LR_stat"]),
+    weighted_sigma.sq = unlist(weighted_nnSVG_output[,"weighted_sigma.sq"]),
+    weighted_tau.sq = unlist(weighted_nnSVG_output[,"weighted_tau.sq"]),
+    weighted_prop_sv = unlist(weighted_nnSVG_output[,"weighted_prop_sv"])
   )
 
   res <- cbind(res,
-               weighted_rank = rank(-1*results[,"weighted_LR_stat"]))
+               weighted_rank = rank(-1*res[,"weighted_LR_stat"]))
 
   if (is(input, "SpatialExperiment")) {
     # return in rowData of spe object
