@@ -5,6 +5,7 @@
 #' @details This function incorporates the weights for each observation to run nnSVG
 
 #' @param input either a SpatialExperiment object which contains a logcounts matrix, or a logcounts matrix
+#' @param spatial_coords matrix containing columns of spatial coordinates, needed if input is a matrix
 #' @param assay_name if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored
 #' @param w weights matrix
 #'
@@ -14,10 +15,13 @@
 #' @import nnSVG
 #' @import purrr
 #' @import scuttle
+#'
 #' @export
 #'
 #' @examples
-#' weighted_nnSVG(spe, "logcounts", w)
+#' weighted_nnSVG(spe, w=weights)
+#'
+#' weighted_nnSVG(logcounts_mat, coords_mat, w=weights)
 #'
 weighted_nnSVG <- function(input, spatial_coords = NULL,
                            assay_name = "logcounts", w){

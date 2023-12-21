@@ -5,6 +5,9 @@
 #' @details This function generates weights for each observation, which are used as input to scale the data and covariates
 
 #' @param spe SpatialExperiment object, contains a raw counts matrix to generate weights from
+#' @param spatial_coords matrix containing columns of spatial coordinates, needed if input is a matrix
+#' @param assay_name if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored
+#' @param stabilize when TRUE, stabilize weights to avoid extrapolation (highly recommended)
 #' @param n_threads default = 1, number of threads for parallelization
 #' @param BPPARAM optional additional argument for parallelization to use BiocParallel
 #'
@@ -167,9 +170,7 @@ generate_weights <- function(input, spatial_coords = NULL,
     #constrain individual observation weights that have lambda hat more extreme than range of r_tilda
     count_changes <- 0
     for (i in 1:nrow(lambda_hat)) {
-      print(i)
       for (j in 1:ncol(lambda_hat)) {
-        print(j)
         #if this observation is greater than the max_ybar, change the weight matrix
         if(lambda_hat[i,j] > max_ybar){
           count_changes <- count_changes + 1
