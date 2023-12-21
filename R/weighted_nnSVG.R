@@ -27,7 +27,7 @@
 #'
 weighted_nnSVG <- function(input, spatial_coords = NULL,
                            assay_name = "logcounts", w,
-                           BPPARAM = NULL){
+                           BPPARAM = MulticoreParam(workers = 1)){
 
   # Make sure nnSVG fixed the interceptless model
   stopifnot(
@@ -66,7 +66,7 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
 
     weighted_nnSVG_i
 
-  })#, BPPARAM = BPPARAM)
+  }, BPPARAM = BPPARAM)
 
   # collapse output list into matrix
   weighted_nnSVG_output <- do.call("rbind", output)
