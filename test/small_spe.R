@@ -48,7 +48,7 @@ library(purrr)
 
 set.seed(1)
 weights <- generate_weights(input = spe, stabilize = TRUE, n_threads = 1, BPPARAM = NULL)
-spe <- weighted_nnSVG(spe, w=weights)
+spe <- weighted_nnSVG(spe, w=weights, BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
 rowData(spe)
 
 #verify that using counts matrix and coords matrix input gives same output as spe object

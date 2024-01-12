@@ -55,8 +55,6 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
   ix <- seq_len(dim(spe)[1])
   output <- bplapply(ix, function(i) {
 
-  #note that putting seed here is the only way the results are replicated
-  #set.seed(1)
     if(is(input, "SpatialExperiment")) {
       weighted_nnSVG_i <- weighted_nnSVG_calc_spe(spe, w, i)
     }
