@@ -69,7 +69,7 @@
 #'
 #' set.seed(1)
 #' weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
-#' results <- weighted_nnSVG(input = logcounts_mat, spatial_coords = coords_mat, w = weights_2)
+#' results <- weighted_nnSVG(input = logcounts_mat, spatial_coords = coords_mat, w = weights_2, BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
 #'
 #' # display results
 #' print(results)
