@@ -26,6 +26,7 @@
 #' library(ggplot2)
 #' library(SpatialExperiment)
 #' library(BRISC)
+#' library(BiocParallel)
 #' library(scuttle)
 #' library(purrr)
 #'
@@ -90,8 +91,8 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
 
   if(is(input, "SpatialExperiment")) {
     weighted_logcounts <- t(w)*logcounts(spe)
-    assay(spe, "weighted_logcounts") <- weighted_logcounts
     weighted_mean <- rowMeans(weighted_logcounts)
+    assay(spe, "weighted_logcounts") <- weighted_logcounts
   }
   else{
     weighted_logcounts_mat <- t(w)*input
