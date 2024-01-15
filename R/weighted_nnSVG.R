@@ -21,9 +21,57 @@
 #' @export
 #'
 #' @examples
-#' weighted_nnSVG(spe, w=weights)
+#' library(nnSVG)
+#' library(STexampleData)
+#' library(ggplot2)
+#' library(SpatialExperiment)
+#' library(BRISC)
+#' library(scuttle)
+#' library(purrr)
 #'
-#' weighted_nnSVG(logcounts_mat, coords_mat, w=weights)
+#'
+#' spe <- Visium_humanDLPFC()
+#'
+#' # keep spots over tissue
+#' spe <- spe[, colData(spe)$in_tissue == 1]
+#'
+#' # filter low-expressed and mitochondrial genes
+#' spe <- filter_genes(spe)
+#'
+#' # calculate logcounts (log-transformed normalized counts) using scran package
+#' spe <- computeLibraryFactors(spe)
+#' spe <- logNormCounts(spe)
+#'
+#' known_genes <- c("MOBP", "PCP4", "SNAP25", "HBB", "IGKC", "NPY")
+#' ix_known <- which(rowData(spe)$gene_name %in% known_genes)
+#' ix <- c(ix_known)
+#'
+#' spe <- spe[ix, ]
+#'
+#' spe <- spe[, colSums(logcounts(spe)) > 0]
+#'
+#' #EXAMPLE 1 USING SPATIAL EXPERIMENT
+#'
+#' set.seed(1)
+#' weights_1 <- generate_weights(input = spe, stabilize = TRUE)
+#' spe_results <- weighted_nnSVG(input = spe, w = weights_1, BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
+#'
+#' # display results
+#' rowData(spe_results)
+#'
+#'
+#' #EXAMPLE 2 USING MATRIX
+#'
+#' counts_mat <- counts(spe)
+#' logcounts_mat <- logcounts(spe)
+#' coords_mat <- spatialCoords(spe)
+#'
+#' set.seed(1)
+#' weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
+#' results <- weighted_nnSVG(input = logcounts_mat, spatial_coords = coords_mat, w = weights_2)
+#'
+#' # display results
+#' print(results)
 #'
 weighted_nnSVG <- function(input, spatial_coords = NULL,
                            assay_name = "logcounts", w,

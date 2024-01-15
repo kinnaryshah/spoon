@@ -11,7 +11,7 @@
 #' @param n_threads default = 1, number of threads for parallelization
 #' @param BPPARAM optional additional argument for parallelization to use BiocParallel
 #'
-#' @return list of s_g, r_tilda, lambda_hat, and weights matrix
+#' @return weights matrix
 #'
 #' @import SpatialExperiment
 #' @import nnSVG
@@ -21,7 +21,48 @@
 #' @export
 #'
 #' @examples
-#' generate_weights(spe)
+#' library(nnSVG)
+#' library(STexampleData)
+#' library(ggplot2)
+#' library(SpatialExperiment)
+#' library(BRISC)
+#' library(BiocParallel)
+#' library(scuttle)
+#'
+#'
+#' spe <- Visium_humanDLPFC()
+#'
+#' # keep spots over tissue
+#' spe <- spe[, colData(spe)$in_tissue == 1]
+#'
+#' # filter low-expressed and mitochondrial genes
+#' spe <- filter_genes(spe)
+#'
+#' # calculate logcounts (log-transformed normalized counts) using scran package
+#' spe <- computeLibraryFactors(spe)
+#' spe <- logNormCounts(spe)
+#'
+#' known_genes <- c("MOBP", "PCP4", "SNAP25", "HBB", "IGKC", "NPY")
+#' ix_known <- which(rowData(spe)$gene_name %in% known_genes)
+#' ix <- c(ix_known)
+#'
+#' spe <- spe[ix, ]
+#'
+#' spe <- spe[, colSums(logcounts(spe)) > 0]
+#'
+#' #EXAMPLE 1 USING SPATIAL EXPERIMENT
+#'
+#' set.seed(1)
+#' weights_1 <- generate_weights(input = spe, stabilize = TRUE)
+#'
+#' #EXAMPLE 2 USING MATRIX
+#'
+#' counts_mat <- counts(spe)
+#' logcounts_mat <- logcounts(spe)
+#' coords_mat <- spatialCoords(spe)
+#'
+#' set.seed(1)
+#' weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
 #'
 generate_weights <- function(input, spatial_coords = NULL,
                              assay_name = "logcounts",
@@ -184,7 +225,7 @@ generate_weights <- function(input, spatial_coords = NULL,
       }
     }
 
-    print(count_changes/(n*G))
+    print(paste0(count_changes/(n*G)*100, "% of observations had their weight stabilized"))
 
     w <- tmp_pred_sqrt_sg^(-4)
 
