@@ -4,13 +4,30 @@
 \alias{generate_weights}
 \title{Generate weights}
 \usage{
-generate_weights(spe)
+generate_weights(
+  input,
+  spatial_coords = NULL,
+  assay_name = "logcounts",
+  stabilize = TRUE,
+  n_threads = 1,
+  BPPARAM = NULL
+)
 }
 \arguments{
+\item{spatial_coords}{matrix containing columns of spatial coordinates, needed if input is a matrix}
+
+\item{assay_name}{if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored}
+
+\item{stabilize}{when TRUE, stabilize weights to avoid extrapolation (highly recommended)}
+
+\item{n_threads}{default = 1, number of threads for parallelization}
+
+\item{BPPARAM}{optional additional argument for parallelization to use BiocParallel}
+
 \item{spe}{SpatialExperiment object, contains a raw counts matrix to generate weights from}
 }
 \value{
-list of s_g, r_tilda, lambda_hat, and weights matrix
+weights matrix
 }
 \description{
 Generate weights on the observation level for each gene
@@ -19,6 +36,47 @@ Generate weights on the observation level for each gene
 This function generates weights for each observation, which are used as input to scale the data and covariates
 }
 \examples{
-generate_weights(spe)
+library(nnSVG)
+library(STexampleData)
+library(ggplot2)
+library(SpatialExperiment)
+library(BRISC)
+library(BiocParallel)
+library(scuttle)
+
+
+spe <- Visium_humanDLPFC()
+
+# keep spots over tissue
+spe <- spe[, colData(spe)$in_tissue == 1]
+
+# filter low-expressed and mitochondrial genes
+spe <- filter_genes(spe)
+
+# calculate logcounts (log-transformed normalized counts) using scran package
+spe <- computeLibraryFactors(spe)
+spe <- logNormCounts(spe)
+
+known_genes <- c("MOBP", "PCP4", "SNAP25", "HBB", "IGKC", "NPY")
+ix_known <- which(rowData(spe)$gene_name \%in\% known_genes)
+ix <- c(ix_known)
+
+spe <- spe[ix, ]
+
+spe <- spe[, colSums(logcounts(spe)) > 0]
+
+#EXAMPLE 1 USING SPATIAL EXPERIMENT
+
+set.seed(1)
+weights_1 <- generate_weights(input = spe, stabilize = TRUE)
+
+#EXAMPLE 2 USING MATRIX
+
+counts_mat <- counts(spe)
+logcounts_mat <- logcounts(spe)
+coords_mat <- spatialCoords(spe)
+
+set.seed(1)
+weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
 
 }

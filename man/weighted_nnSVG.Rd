@@ -4,14 +4,24 @@
 \alias{weighted_nnSVG}
 \title{Weighted nnSVG}
 \usage{
-weighted_nnSVG(input, assay_name = "logcounts", w)
+weighted_nnSVG(
+  input,
+  spatial_coords = NULL,
+  assay_name = "logcounts",
+  w,
+  BPPARAM = MulticoreParam(workers = 1)
+)
 }
 \arguments{
-\item{input}{either a SpatialExperiment object which contains a logcounts matrix, or a matrix}
+\item{input}{either a SpatialExperiment object which contains a logcounts matrix, or a logcounts matrix}
 
-\item{assay_name}{name of the assay in which the logcounts matrix is stored}
+\item{spatial_coords}{matrix containing columns of spatial coordinates, needed if input is a matrix}
+
+\item{assay_name}{if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored}
 
 \item{w}{weights matrix}
+
+\item{BPPARAM}{optional additional argument for parallelization to use BiocParallel}
 }
 \value{
 either spe with weighted nnSVG statistics, or matrix with weighted nnSVG statistics
@@ -23,6 +33,57 @@ Run nnSVG for SVG detection using the weights
 This function incorporates the weights for each observation to run nnSVG
 }
 \examples{
-weighted_nnSVG(spe, "logcounts", w)
+library(nnSVG)
+library(STexampleData)
+library(ggplot2)
+library(SpatialExperiment)
+library(BRISC)
+library(BiocParallel)
+library(scuttle)
+library(purrr)
+library(Matrix)
+
+spe <- Visium_humanDLPFC()
+
+# keep spots over tissue
+spe <- spe[, colData(spe)$in_tissue == 1]
+
+# filter low-expressed and mitochondrial genes
+spe <- filter_genes(spe)
+
+# calculate logcounts (log-transformed normalized counts) using scran package
+spe <- computeLibraryFactors(spe)
+spe <- logNormCounts(spe)
+
+known_genes <- c("MOBP", "PCP4", "SNAP25", "HBB", "IGKC", "NPY")
+ix_known <- which(rowData(spe)$gene_name \%in\% known_genes)
+ix <- c(ix_known)
+
+spe <- spe[ix, ]
+
+spe <- spe[, colSums(logcounts(spe)) > 0]
+
+#EXAMPLE 1 USING SPATIAL EXPERIMENT
+
+set.seed(1)
+weights_1 <- generate_weights(input = spe, stabilize = TRUE)
+spe_results <- weighted_nnSVG(input = spe, w = weights_1, BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
+
+# display results
+rowData(spe_results)
+
+
+#EXAMPLE 2 USING MATRIX
+
+counts_mat <- counts(spe)
+logcounts_mat <- logcounts(spe)
+coords_mat <- spatialCoords(spe)
+
+set.seed(1)
+weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
+results <- weighted_nnSVG(input = logcounts_mat, spatial_coords = coords_mat, w = weights_2, BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
+
+# display results
+print(results)
 
 }
