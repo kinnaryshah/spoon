@@ -16,8 +16,11 @@ Authors@R: c(
            role = c("aut"), 
            comment = c(ORCID = "0000-0002-7858-0231")))
 Description: This package uses Empirical Bayes techniques to address the mean-variance relationship in spatially resolved transcriptomics data. Precision weights are generated for individual observations, which can be used to rescale the data and covariates used as input in spatially variable gene detection tools.
-Imports: SpatialExperiment, BRISC, nnSVG, purrr, scuttle, BiocParallel
+Imports: SpatialExperiment, BRISC, nnSVG, purrr, scuttle, BiocParallel, Matrix
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
