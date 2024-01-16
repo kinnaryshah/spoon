@@ -17,6 +17,7 @@
 #' @import purrr
 #' @import scuttle
 #' @import BiocParallel
+#' @import Matrix
 
 #' @export
 #'
