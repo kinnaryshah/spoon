@@ -29,7 +29,7 @@
 #' library(BiocParallel)
 #' library(scuttle)
 #' library(purrr)
-#'
+#' library(Matrix)
 #'
 #' spe <- Visium_humanDLPFC()
 #'
@@ -91,7 +91,7 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
 
   if(is(input, "SpatialExperiment")) {
     weighted_logcounts <- t(w)*logcounts(spe)
-    weighted_mean <- rowMeans(weighted_logcounts)
+    weighted_mean <- Matrix::rowMeans(weighted_logcounts)
     assay(spe, "weighted_logcounts") <- weighted_logcounts
   }
   else{
