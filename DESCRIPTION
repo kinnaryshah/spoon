@@ -22,8 +22,8 @@ Description: This package addresses the mean-variance relationship in spatially
   variable gene detection tools.
 URL: https://github.com/kinnaryshah/spoon
 BugReports: https://github.com/kinnaryshah/spoon/issues
-Imports: SpatialExperiment, BRISC, nnSVG, scuttle, BiocParallel, Matrix, purrr,
-methods
+Imports: SpatialExperiment, BRISC, nnSVG, scuttle, BiocParallel, Matrix, purrr, 
+  methods
 License: MIT + file LICENSE
 Encoding: UTF-8
 biocViews: 
