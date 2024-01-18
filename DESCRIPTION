@@ -19,6 +19,8 @@ Description: This package uses Empirical Bayes techniques to address the mean-va
 Imports: SpatialExperiment, BRISC, nnSVG, purrr, scuttle, BiocParallel, Matrix
 License: GPL (>= 3)
 Encoding: UTF-8
+biocViews: 
+    Spatial, SingleCell, Transcriptomics, GeneExpression, Preprocessing
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
