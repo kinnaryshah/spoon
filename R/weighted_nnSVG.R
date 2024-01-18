@@ -97,13 +97,13 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
   }
 
   if(is(input, "SpatialExperiment")) {
-    stopifnot(dim(w) == dim(assays(spe)[[assay_name]]))
+    stopifnot(dim(t(w)) == dim(assays(spe)[[assay_name]]))
     weighted_logcounts <- t(w)*assays(spe)[[assay_name]]
     weighted_mean <- Matrix::rowMeans(weighted_logcounts)
     assay(spe, "weighted_logcounts") <- weighted_logcounts
   }
   else{
-    stopifnot(dim(w) == dim(input))
+    stopifnot(dim(t(w)) == dim(input))
     weighted_logcounts_mat <- t(w)*input
     weighted_mean <- rowMeans(weighted_logcounts_mat)
   }
