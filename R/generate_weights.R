@@ -88,7 +88,6 @@ generate_weights <- function(input, spatial_coords = NULL,
   } else {
     r <- t(as.matrix(input))
     coords <- spatial_coords
-    row_names <- rownames(input)
   }
 
   n <- dim(r)[1] # Number of Cells
