@@ -2,16 +2,21 @@
 #'
 #' Run nnSVG for SVG detection using the weights
 #'
-#' @details This function incorporates the weights for each observation to run nnSVG
+#' @details This function incorporates weights for each observation to run nnSVG
 
-#' @param input either a SpatialExperiment object which contains a logcounts matrix, or a logcounts matrix
-#' @param spatial_coords matrix containing columns of spatial coordinates, needed if input is a matrix
-#' @param assay_name if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored
+#' @param input either a SpatialExperiment object which contains a logcounts
+#' matrix, or a logcounts matrix
+#' @param spatial_coords matrix containing columns of spatial coordinates,
+#' needed if input is a matrix
+#' @param assay_name if using a SpatialExperiment object, name of the assay in
+#' which the logcounts matrix is stored
 #' @param w weights matrix
 #' @param n_threads default = 1, number of threads for parallelization
-#' @param BPPARAM optional additional argument for parallelization to use BiocParallel
+#' @param BPPARAM optional additional argument for parallelization to use
+#' BiocParallel
 
-#' @return either spe with weighted nnSVG statistics, or matrix with weighted nnSVG statistics
+#' @return either spe with weighted nnSVG statistics, or matrix with weighted
+#' nnSVG statistics
 #'
 #' @import SpatialExperiment
 #' @import nnSVG
@@ -55,8 +60,11 @@
 #' #EXAMPLE 1 USING SPATIAL EXPERIMENT
 #'
 #' set.seed(1)
-#' weights_1 <- generate_weights(input = spe, stabilize = TRUE)
-#' spe_results <- weighted_nnSVG(input = spe, w = weights_1, BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
+#' weights_1 <- generate_weights(input = spe,
+#'                               stabilize = TRUE)
+#' spe_results <- weighted_nnSVG(input = spe,
+#'                               w = weights_1,
+#'                               BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
 #'
 #' # display results
 #' rowData(spe_results)
@@ -69,8 +77,13 @@
 #' coords_mat <- spatialCoords(spe)
 #'
 #' set.seed(1)
-#' weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
-#' results <- weighted_nnSVG(input = logcounts_mat, spatial_coords = coords_mat, w = weights_2, BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
+#' weights_2 <- generate_weights(input = counts_mat,
+#'                               spatial_coords = coords_mat,
+#'                               stabilize = TRUE)
+#' results <- weighted_nnSVG(input = logcounts_mat,
+#'                           spatial_coords = coords_mat,
+#'                           w = weights_2,
+#'                           BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
 #'
 #' # display results
 #' print(results)
@@ -117,7 +130,8 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
     }
     else{
       stopifnot(dim(spatial_coords)[1] == dim(input)[2])
-      weighted_nnSVG_i <- weighted_nnSVG_calc_mat(weighted_logcounts_mat, spatial_coords, w, i)
+      weighted_nnSVG_i <- weighted_nnSVG_calc_mat(weighted_logcounts_mat,
+                                                  spatial_coords, w, i)
     }
 
     weighted_nnSVG_i

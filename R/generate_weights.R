@@ -2,14 +2,20 @@
 #'
 #' Generate weights on the observation level for each gene
 #'
-#' @details This function generates weights for each observation, which are used as input to scale the data and covariates
+#' @details This function generates weights for each observation, which are used
+#' as input to scale the data and covariates
 
-#' @param spe SpatialExperiment object, contains a raw counts matrix to generate weights from
-#' @param spatial_coords matrix containing columns of spatial coordinates, needed if input is a matrix
-#' @param assay_name if using a SpatialExperiment object, name of the assay in which the counts matrix is stored
-#' @param stabilize when TRUE, stabilize weights to avoid extrapolation (highly recommended)
+#' @param spe SpatialExperiment object, contains a raw counts matrix to generate
+#' weights from
+#' @param spatial_coords matrix containing columns of spatial coordinates,
+#' needed if input is a matrix
+#' @param assay_name if using a SpatialExperiment object, name of the assay in
+#' which the counts matrix is stored
+#' @param stabilize when TRUE, stabilize weights to avoid extrapolation (highly
+#' recommended)
 #' @param n_threads default = 1, number of threads for parallelization
-#' @param BPPARAM optional additional argument for parallelization to use BiocParallel
+#' @param BPPARAM optional additional argument for parallelization to use
+#' BiocParallel
 #'
 #' @return weights matrix
 #'
@@ -52,7 +58,8 @@
 #' #EXAMPLE 1 USING SPATIAL EXPERIMENT
 #'
 #' set.seed(1)
-#' weights_1 <- generate_weights(input = spe, stabilize = TRUE)
+#' weights_1 <- generate_weights(input = spe,
+#'                               stabilize = TRUE)
 #'
 #' #EXAMPLE 2 USING MATRIX
 #'
@@ -61,7 +68,9 @@
 #' coords_mat <- spatialCoords(spe)
 #'
 #' set.seed(1)
-#' weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
+#' weights_2 <- generate_weights(input = counts_mat,
+#'                               spatial_coords = coords_mat,
+#'                               stabilize = TRUE)
 #'
 generate_weights <- function(input, spatial_coords = NULL,
                              assay_name = "counts",
@@ -166,7 +175,7 @@ generate_weights <- function(input, spatial_coords = NULL,
   r_tilda <- y_bar + log2(R_tilda) - log2(10^6)
   stopifnot(length(r_tilda)==G)
 
-  # *PREDICT MODEL -----------------------------------------------------------------
+  # *PREDICT MODEL -----------------------------------------------------------
   stopifnot(dim(mu_hat)==dim(tmp_R_mat))
   lambda_hat <- mu_hat + log2(tmp_R_mat+1) - log2(10^6)
 
@@ -202,16 +211,16 @@ generate_weights <- function(input, spatial_coords = NULL,
         nrow = n, ncol = G
       )
 
-    #constrain individual observation weights that have lambda hat more extreme than range of r_tilda
+    #constrain observation weights with more extreme lambda hat than r_tilda
     count_changes <- 0
     for (i in 1:nrow(lambda_hat)) {
       for (j in 1:ncol(lambda_hat)) {
-        #if this observation is greater than the max_ybar, change the weight matrix
+        #if observation is greater than max_ybar, change the weight matrix
         if(lambda_hat[i,j] > max_ybar){
           count_changes <- count_changes + 1
           tmp_pred_sqrt_sg[i,j] <- s_g_max_ybar
         }
-        #if this observation is less than the min_ybar, change the weight matrix
+        #if observation is less than min_ybar, change the weight matrix
         if(lambda_hat[i,j] < min_ybar){
           count_changes <- count_changes + 1
           tmp_pred_sqrt_sg[i,j] <- s_g_min_ybar
@@ -219,7 +228,8 @@ generate_weights <- function(input, spatial_coords = NULL,
       }
     }
 
-    print(paste0(count_changes/(n*G)*100, "% of observations had their weight stabilized"))
+    print(paste0(count_changes/(n*G)*100,
+                 "% of observations had their weight stabilized"))
 
     w <- tmp_pred_sqrt_sg^(-4)
 
