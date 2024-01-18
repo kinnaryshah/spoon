@@ -7,24 +7,29 @@
 generate_weights(
   input,
   spatial_coords = NULL,
-  assay_name = "logcounts",
+  assay_name = "counts",
   stabilize = TRUE,
   n_threads = 1,
   BPPARAM = NULL
 )
 }
 \arguments{
-\item{spatial_coords}{matrix containing columns of spatial coordinates, needed if input is a matrix}
+\item{input}{either a SpatialExperiment object which contains a counts
+matrix, or a counts matrix}
 
-\item{assay_name}{if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored}
+\item{spatial_coords}{matrix containing columns of spatial coordinates,
+needed if input is a matrix}
 
-\item{stabilize}{when TRUE, stabilize weights to avoid extrapolation (highly recommended)}
+\item{assay_name}{if using a SpatialExperiment object, name of the assay in
+which the counts matrix is stored}
+
+\item{stabilize}{when TRUE, stabilize weights to avoid extrapolation (highly
+recommended)}
 
 \item{n_threads}{default = 1, number of threads for parallelization}
 
-\item{BPPARAM}{optional additional argument for parallelization to use BiocParallel}
-
-\item{spe}{SpatialExperiment object, contains a raw counts matrix to generate weights from}
+\item{BPPARAM}{optional additional argument for parallelization to use
+BiocParallel}
 }
 \value{
 weights matrix
@@ -33,12 +38,12 @@ weights matrix
 Generate weights on the observation level for each gene
 }
 \details{
-This function generates weights for each observation, which are used as input to scale the data and covariates
+This function generates weights for each observation, which are used
+as input to scale the data and covariates
 }
 \examples{
 library(nnSVG)
 library(STexampleData)
-library(ggplot2)
 library(SpatialExperiment)
 library(BRISC)
 library(BiocParallel)
@@ -68,7 +73,8 @@ spe <- spe[, colSums(logcounts(spe)) > 0]
 #EXAMPLE 1 USING SPATIAL EXPERIMENT
 
 set.seed(1)
-weights_1 <- generate_weights(input = spe, stabilize = TRUE)
+weights_1 <- generate_weights(input = spe,
+                              stabilize = TRUE)
 
 #EXAMPLE 2 USING MATRIX
 
@@ -77,6 +83,8 @@ logcounts_mat <- logcounts(spe)
 coords_mat <- spatialCoords(spe)
 
 set.seed(1)
-weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
+weights_2 <- generate_weights(input = counts_mat,
+                              spatial_coords = coords_mat,
+                              stabilize = TRUE)
 
 }
