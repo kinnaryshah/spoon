@@ -25,12 +25,10 @@
 #' @examples
 #' library(nnSVG)
 #' library(STexampleData)
-#' library(ggplot2)
 #' library(SpatialExperiment)
 #' library(BRISC)
 #' library(BiocParallel)
 #' library(scuttle)
-#' library(purrr)
 #' library(Matrix)
 #'
 #' spe <- Visium_humanDLPFC()

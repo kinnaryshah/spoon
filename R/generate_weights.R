@@ -23,7 +23,6 @@
 #' @examples
 #' library(nnSVG)
 #' library(STexampleData)
-#' library(ggplot2)
 #' library(SpatialExperiment)
 #' library(BRISC)
 #' library(BiocParallel)
