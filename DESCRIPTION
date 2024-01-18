@@ -15,11 +15,11 @@ Authors@R: c(
            email = "shicks19@jhu.edu", 
            role = c("aut"), 
            comment = c(ORCID = "0000-0002-7858-0231")))
-Description: This package addresses the mean-variance relationship in spatially 
-resolved transcriptomics data. Precision weights are generated for individual
-observations using Empirical Bayes techniques. These weights are used to rescale
-the data and covariates, which are then used as input in spatially variable gene
-detection tools.
+Description: This package addresses the mean-variance relationship in spatially
+  resolved transcriptomics data. Precision weights are generated for individual
+  observations using Empirical Bayes techniques. These weights are used to
+  rescale the data and covariates, which are then used as input in spatially
+  variable gene detection tools.
 URL: https://github.com/kinnaryshah/spoon
 BugReports: https://github.com/kinnaryshah/spoon/issues
 Imports: SpatialExperiment, BRISC, nnSVG, scuttle, BiocParallel, Matrix, purrr,
