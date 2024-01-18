@@ -170,11 +170,6 @@ generate_weights <- function(input, spatial_coords = NULL,
   stopifnot(dim(mu_hat)==dim(tmp_R_mat))
   lambda_hat <- mu_hat + log2(tmp_R_mat+1) - log2(10^6)
 
-  #gives percentage of lambda_hat values out of range
-  sum(lambda_hat < range(r_tilda)[1] | lambda_hat > range(r_tilda)[2]) / (dim(spe)[1]*dim(spe)[2])
-  sum(lambda_hat < range(r_tilda)[1]) / (dim(spe)[1]*dim(spe)[2])
-  sum(lambda_hat > range(r_tilda)[2]) / (dim(spe)[1]*dim(spe)[2])
-
   spline_fit <- smooth.spline(y=sqrt(s_g), x=r_tilda)
 
   # NOTE: It is possible that lambda is out of range of r_tilda
