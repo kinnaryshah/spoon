@@ -5,8 +5,8 @@
 #' @details This function generates weights for each observation, which are used
 #' as input to scale the data and covariates
 
-#' @param spe SpatialExperiment object, contains a raw counts matrix to generate
-#' weights from
+#' @param input either a SpatialExperiment object which contains a counts
+#' matrix, or a counts matrix
 #' @param spatial_coords matrix containing columns of spatial coordinates,
 #' needed if input is a matrix
 #' @param assay_name if using a SpatialExperiment object, name of the assay in
