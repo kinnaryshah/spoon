@@ -86,6 +86,7 @@ generate_weights <- function(input, spatial_coords = NULL,
     coords <- spatialCoords(spe)
 
   } else {
+    stopifnot(dim(spatial_coords)[1] == dim(input)[2])
     r <- t(as.matrix(input))
     coords <- spatial_coords
   }
