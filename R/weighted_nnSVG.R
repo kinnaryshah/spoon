@@ -91,7 +91,7 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
   }
 
   if(is(input, "SpatialExperiment")) {
-    weighted_logcounts <- t(w)*logcounts(spe)
+    weighted_logcounts <- t(w)*assays(spe)[[assay_name]]
     weighted_mean <- Matrix::rowMeans(weighted_logcounts)
     assay(spe, "weighted_logcounts") <- weighted_logcounts
   }
