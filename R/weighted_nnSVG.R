@@ -8,6 +8,7 @@
 #' @param spatial_coords matrix containing columns of spatial coordinates, needed if input is a matrix
 #' @param assay_name if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored
 #' @param w weights matrix
+#' @param n_threads default = 1, number of threads for parallelization
 #' @param BPPARAM optional additional argument for parallelization to use BiocParallel
 
 #' @return either spe with weighted nnSVG statistics, or matrix with weighted nnSVG statistics
@@ -77,6 +78,7 @@
 #'
 weighted_nnSVG <- function(input, spatial_coords = NULL,
                            assay_name = "logcounts", w,
+                           n_threads = 1,
                            BPPARAM = MulticoreParam(workers = 1)){
 
   # Make sure nnSVG fixed the interceptless model
@@ -84,6 +86,10 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
     "Please update your nnSVG to minimum v1.5.3 to have the correct result" =
       packageVersion("nnSVG")>='1.5.3'
   )
+
+  if (n_threads > 1) {
+    BPPARAM <- MulticoreParam(workers = n_threads)
+  }
 
   if (is(input, "SpatialExperiment")) {
     spe <- input
