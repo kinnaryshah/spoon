@@ -6,7 +6,7 @@
 
 #' @param spe SpatialExperiment object, contains a raw counts matrix to generate weights from
 #' @param spatial_coords matrix containing columns of spatial coordinates, needed if input is a matrix
-#' @param assay_name if using a SpatialExperiment object, name of the assay in which the logcounts matrix is stored
+#' @param assay_name if using a SpatialExperiment object, name of the assay in which the counts matrix is stored
 #' @param stabilize when TRUE, stabilize weights to avoid extrapolation (highly recommended)
 #' @param n_threads default = 1, number of threads for parallelization
 #' @param BPPARAM optional additional argument for parallelization to use BiocParallel
@@ -65,7 +65,7 @@
 #' weights_2 <- generate_weights(input = counts_mat, spatial_coords = coords_mat, stabilize = TRUE)
 #'
 generate_weights <- function(input, spatial_coords = NULL,
-                             assay_name = "logcounts",
+                             assay_name = "counts",
                              stabilize = TRUE,
                              n_threads = 1, BPPARAM = NULL){
 
@@ -82,7 +82,7 @@ generate_weights <- function(input, spatial_coords = NULL,
 
   # Count Matrix, transpose so each row is a spot, and each column is a gene
   if (is(input, "SpatialExperiment")) {
-    r <- t(as.matrix(counts(spe)))
+    r <- t(as.matrix(assays(spe)[[assay_name]]))
     coords <- spatialCoords(spe)
 
   } else {
