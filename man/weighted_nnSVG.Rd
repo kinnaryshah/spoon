@@ -77,7 +77,8 @@ weights_1 <- generate_weights(input = spe,
                               stabilize = TRUE)
 spe_results <- weighted_nnSVG(input = spe,
                               w = weights_1,
-                              BPPARAM = MulticoreParam(workers = 1, RNGseed = 4))
+                              BPPARAM = MulticoreParam(workers = 1,
+                                                       RNGseed = 4))
 
 # display results
 rowData(spe_results)
