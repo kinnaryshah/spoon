@@ -18,3 +18,10 @@ vignette: >
 ---
 
 This package contains functions to address the mean-variance relationship in spatially resolved transcriptomics data.
+
+# Session information
+
+```{r}
+sessionInfo()
+```
+
