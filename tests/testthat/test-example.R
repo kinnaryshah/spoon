@@ -1,5 +1,5 @@
 # run examples from function documentation
-example(generate_weights, echo = FALSE)
+example(weighted_nnSVG, echo = FALSE)
 
 test_that("example object has correct class", {
   expect_s4_class(spe_results, "SpatialExperiment")
