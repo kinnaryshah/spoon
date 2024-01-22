@@ -213,8 +213,8 @@ generate_weights <- function(input, spatial_coords = NULL,
 
     #constrain observation weights with more extreme lambda hat than r_tilda
     count_changes <- 0
-    for (i in 1:nrow(lambda_hat)) {
-      for (j in 1:ncol(lambda_hat)) {
+    for (i in seq_len(nrow(lambda_hat))) {
+      for (j in seq_len(ncol(lambda_hat))) {
         #if observation is greater than max_ybar, change the weight matrix
         if(lambda_hat[i,j] > max_ybar){
           count_changes <- count_changes + 1
