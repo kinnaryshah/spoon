@@ -120,12 +120,12 @@ generate_weights <- function(input, spatial_coords = NULL,
   coords <- apply(coords, 2, function(col) (col - min(col)) / range_all)
 
   # calculate ordering of coordinates
-  order_brisc <- BRISC_order(coords, order = "AMMD", verbose = F)
+  order_brisc <- BRISC_order(coords, order = "AMMD", verbose = FALSE)
 
   # calculate nearest neighbors
   nn_brisc <- BRISC_neighbor(coords, n.neighbors = 10, n_omp = 1,
                              search.type = "tree", ordering = order_brisc,
-                             verbose = F)
+                             verbose = FALSE)
 
   # run BRISC using parallelization
   # run BRISC by column of y so BRISC is run per gene
@@ -139,12 +139,13 @@ generate_weights <- function(input, spatial_coords = NULL,
         out_i <- BRISC_estimation(coords = coords, y = y_i, x = NULL,
                                   cov.model = "exponential",
                                   ordering = order_brisc, neighbor = nn_brisc,
-                                  verbose = F)
+                                  verbose = FALSE)
       })
     })
 
 
-    pred_i <- BRISC_prediction(out_i, coords = coords, X.0 = NULL, verbose = F)
+    pred_i <- BRISC_prediction(out_i, coords = coords, X.0 = NULL,
+                               verbose = FALSE)
     residual_i <- y_i - pred_i$prediction
 
     return(list(pred_i$prediction, residual_i))
