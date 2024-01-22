@@ -1,0 +1,20 @@
+---
+title: "spoon Tutorial"
+author: 
+  - name: Kinnary H. Shah
+    affiliation: &id1 "Johns Hopkins Bloomberg School of Public Health, Baltimore, MD, USA"
+  - name: Boyi Guo
+    affiliation: *id1
+  - name: Stephanie C. Hicks
+    affiliation: *id1
+package: spoon
+output: 
+  BiocStyle::html_document: 
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{spoon Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This package contains functions to address the mean-variance relationship in spatially resolved transcriptomics data.
