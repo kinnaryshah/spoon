@@ -29,7 +29,7 @@ Encoding: UTF-8
 biocViews: 
     Spatial, SingleCell, Transcriptomics, GeneExpression, Preprocessing
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Suggests: 
     testthat, STexampleData
 Config/testthat/edition: 3
