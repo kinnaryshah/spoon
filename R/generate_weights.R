@@ -229,8 +229,8 @@ generate_weights <- function(input, spatial_coords = NULL,
       }
     }
 
-    print(paste0(count_changes/(n*G)*100,
-                 "% of observations had their weight stabilized"))
+    message(count_changes/(n*G)*100,
+            "% of observations had their weight stabilized")
 
     w <- tmp_pred_sqrt_sg^(-4)
 
