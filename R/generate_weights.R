@@ -136,7 +136,7 @@ generate_weights <- function(input, spatial_coords = NULL,
     y_i <- y[ ,i]
     suppressWarnings({
       runtime <- system.time({
-        out_i <- BRISC_estimation(coords = coords, y = y_i, x = NULL,
+        out_i <- BRISC_estimation(coords.0 = coords, y = y_i, x = NULL,
                                   cov.model = "exponential",
                                   ordering = order_brisc, neighbor = nn_brisc,
                                   verbose = FALSE)
