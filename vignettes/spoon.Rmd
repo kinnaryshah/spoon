@@ -24,26 +24,58 @@ editor_options:
 
 # Introduction
 
-`spoon` is a method to address the mean-variance relationship in spatially resolved transcriptomics data. Current approaches rank spatially variable genes based on either p-values or some effect size, such as the proportion of spatially variable genes. However, previous work in RNA-sequencing has shown that a technical bias, referred to as the "mean-variance relationship", exists in these data in that the gene-level variance is correlated with mean RNA expression. We found that there is a "mean-variance relationship" in spatial transcriptomics data, and so we propose `spoon`, a statistical framework to prioritize spatially variable genes that is not confounded by this relationship. We fit a spline curve to estimate the mean-variance relationship. Then, similar to using weights in a weighted least squares model, we used weights that we plugged into a Gaussian Process Regression model fit with a nearest-neighbor Gaussian process model to the preprocessed expression measurements for each gene, i.e. one model per gene. `spoon` removes the bias and leads to a more informative set of spatially variable genes.
+`spoon` is a method to address the mean-variance relationship in
+spatially resolved transcriptomics data. Current approaches rank
+spatially variable genes based on either p-values or some effect size,
+such as the proportion of spatially variable genes. However, previous
+work in RNA-sequencing has shown that a technical bias, referred to as
+the "mean-variance relationship", exists in these data in that the
+gene-level variance is correlated with mean RNA expression. We found
+that there is a "mean-variance relationship" in spatial transcriptomics
+data, and so we propose `spoon`, a statistical framework to prioritize
+spatially variable genes that is not confounded by this relationship. We
+fit a spline curve to estimate the mean-variance relationship. Then,
+similar to using weights in a weighted least squares model, we used
+weights that we plugged into a Gaussian Process Regression model fit
+with a nearest-neighbor Gaussian process model to the preprocessed
+expression measurements for each gene, i.e. one model per gene. `spoon`
+removes the bias and leads to a more informative set of spatially
+variable genes.
 
-The `generate_weights()` function calculates individual observation weights, where an individual observation is a UMI (unique molecular identifier) count value for a specific gene and sample. If the desired SVG detection method accepts weights, then the individual observation weights can be used as inputs. If the desired SVG detection method does not accept weights, then the Delta method is leveraged to rescale the data and covariates by the weights. These scaled data and covariates are used as inputs into the desired SVG detection function.
+The `generate_weights()` function calculates individual observation
+weights, where an individual observation is a UMI (unique molecular
+identifier) count value for a specific gene and sample. If the desired
+SVG detection method accepts weights, then the individual observation
+weights can be used as inputs. If the desired SVG detection method does
+not accept weights, then the Delta method is leveraged to rescale the
+data and covariates by the weights. These scaled data and covariates are
+used as inputs into the desired SVG detection function.
 
 # Installation
 
-The following code will install the latest release version of the `spoon` package from Bioconductor. Additional details are shown on the [Bioconductor](https://bioconductor.org/packages/spoon) page.
+The following code will install the latest release version of the
+`spoon` package from Bioconductor. Additional details are shown on the
+[Bioconductor](https://bioconductor.org/packages/spoon) page.
 
 ```{r, eval=FALSE}
 install.packages("BiocManager")
 BiocManager::install("spoon")
 ```
 
-The latest development version can also be installed from the `devel` version of Bioconductor or from [GitHub](https://github.com/kinnaryshah/spoon).
+The latest development version can also be installed from the `devel`
+version of Bioconductor or from
+[GitHub](https://github.com/kinnaryshah/spoon).
 
 # Input data format
 
-We recommend the input data be provided as a [SpatialExperiment](https://bioconductor.org/packages/SpatialExperiment) Bioconductor object. The outputs are stored in the `rowData` of the `SpatialExperiment` object. The examples below use this input data format.
+We recommend the input data be provided as a
+[SpatialExperiment](https://bioconductor.org/packages/SpatialExperiment)
+Bioconductor object. The outputs are stored in the `rowData` of the
+`SpatialExperiment` object. The examples below use this input data
+format.
 
-The inputs can also be provided as a numeric matrix of raw counts and a numeric matrix of spatial coordinates.
+The inputs can also be provided as a numeric matrix of raw counts and a
+numeric matrix of spatial coordinates.
 
 # Tutorial
 
@@ -85,7 +117,7 @@ spe <- spe[ix_random, ]
 spe <- spe[, colSums(logcounts(spe)) > 0]
 ```
 
-**Step 1: Generate weights**
+**Step 1: generate weights**
 
 ```{r}
 weights <- generate_weights(input = spe,
@@ -94,7 +126,7 @@ weights <- generate_weights(input = spe,
                                                      RNGseed = 4))
 ```
 
-**Step 2: Weighted SVG detection**
+**Step 2: weighted SVG detection**
 
 ```{r}
 spe <- weighted_nnSVG(input = spe,
@@ -111,19 +143,30 @@ rowData(spe_results)
 
 **Other SVG detection tools**
 
-We provided a function to use the weights with [nnSVG](https://www.nature.com/articles/s41467-023-39748-z) for more accurate spatially variable gene detection. The weights can also be used with other spatially variable gene detection tools using the following procedure:
+We provided a function to use the weights with
+[nnSVG](https://www.nature.com/articles/s41467-023-39748-z) for more
+accurate spatially variable gene detection. The weights can also be used
+with other spatially variable gene detection tools using the following
+procedure:
 
-```{r}
+```{r, eval=FALSE}
 assay_name <- "logcounts"
 weighted_logcounts <- t(weights)*assays(spe)[[assay_name]]
 assay(spe, "weighted_logcounts") <- weighted_logcounts
 ```
 
-`weighted_logcounts` can be accessed from `assay(spe, "weighted_logcounts")`. Then, `weighted_logcounts` should be used as the input counts matrix and `weights` as the input covariate matrix in a spatially variable detection tool.
+`weighted_logcounts` can be accessed from
+`assay(spe, "weighted_logcounts")`. Then, `weighted_logcounts` should be
+used as the input counts matrix and `weights` as the input covariate
+matrix in a spatially variable detection tool.
 
 # Adressing the mean-variance relationship
 
-In the Tutorial section, we showed how to use the functions in `spoon` on a small number of genes for a faster runtime. This section will show how these methods address the mean-variance relationship in spatial transcriptomics data. The code below takes several hours to run, but can be reproduced if desired.
+In the Tutorial section, we showed how to use the functions in `spoon`
+on a small number of genes for a faster runtime. This section will show
+how these methods address the mean-variance relationship in spatial
+transcriptomics data. The code below takes several hours to run, but can
+be reproduced if desired.
 
 **Simulate data**
 
@@ -135,13 +178,12 @@ library(scuttle)
 
 set.seed(1)
 
-#4992 spots and 2000 genes
+#4992 spots and 300 genes
 
-n_genes <- 2000
+n_genes <- 300
 fraction <- 0.5
 max_sigma.sq <- 1
 low_range_beta <- c(0.5,1)
-#high_range_beta <- c(4,8)
 
 #check if integer
 stopifnot(n_genes*fraction*0.5 == round(n_genes*fraction*0.5))
@@ -239,6 +281,7 @@ spe_weighted <- weighted_nnSVG(input = spe, w = weights)
 ```
 
 **Visualize effect of weighting**
+
 ```{r, eval=FALSE}
 library(ggplot2)
 library(SpatialExperiment)
@@ -336,6 +379,28 @@ rank_separated_w <- ggplot(df, aes(x = rank, y = quantile)) +
 
 ridge_signal <- wrap_plots(rank_separated_unw, rank_separated_w, nrow=1, guides = "collect") 
 ```
+
+These code chunks have been evaluated and lead to the figure below with
+both ridge plots. All the simulated genes are spatially varying genes,
+but to different degrees, and the controlled mean and spatial variance
+parameters are not correlated. After simulating the data, weights were
+generated and constrained. To rank SVGs,
+[nnSVG](https://www.nature.com/articles/s41467-023-39748-z) was run on
+both the unweighted logcounts and on the weighted logcounts matrices.
+This figure shows the comparison between unweighted nnSVG ranks and
+weighted nnSVG ranks within deciles based on mean expression. The
+distribution of ranks moves toward zero for lower mean expression
+deciles after the weighting is applied, indicating that SVGs are able to
+be found even when they have low expression (subfigure A). Each decile
+has spatially variable genes that should be highly ranked, and the
+weighted method is able to recover these in the lowly expressed deciles.
+In order to separate background noise from true signal, the densities of
+the top three ranks from each decile are plotted separately from the
+remaining genes in each decile (subfigure B). The weighted method is
+able to find highly ranked SVGs even in lower deciles, showing that
+`spoon` addresses the mean-variance relationship.
+
+![](ridge.png)
 
 # Session information
 
