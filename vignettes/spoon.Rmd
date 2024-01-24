@@ -90,6 +90,7 @@ library(BiocParallel)
 library(scuttle)
 library(Matrix)
 library(purrr)
+library(spoon)
 
 spe <- Visium_mouseCoronal()
 ```
@@ -138,7 +139,7 @@ spe <- weighted_nnSVG(input = spe,
 
 ```{r}
 # display results
-rowData(spe_results)
+rowData(spe)
 ```
 
 **Other SVG detection tools**
