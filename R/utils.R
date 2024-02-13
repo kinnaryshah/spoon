@@ -10,7 +10,7 @@ weighted_nnSVG_calc_spe <- function(spe, w, i){
          weighted_tau.sq = rowData(weight_output_i)$tau.sq,
          weighted_prop_sv = rowData(weight_output_i)$prop_sv)
   }, error=function(e){
-    cat("ERROR :",conditionMessage(e), "\n")
+    message("ERROR :",conditionMessage(e), "\n")
     list(weighted_LR_stat = NA,
          weighted_sigma.sq = NA,
          weighted_tau.sq = NA,
@@ -30,7 +30,7 @@ weighted_nnSVG_calc_mat <- function(w_logcounts_mat, coords, w, i){
          weighted_tau.sq = weight_output_i[2],
          weighted_prop_sv = weight_output_i[9])
   }, error=function(e){
-    cat("ERROR :",conditionMessage(e), "\n")
+    message("ERROR :",conditionMessage(e), "\n")
     list(weighted_LR_stat = NA,
          weighted_sigma.sq = NA,
          weighted_tau.sq = NA,
