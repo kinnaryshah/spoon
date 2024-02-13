@@ -22,14 +22,13 @@ Description: This package addresses the mean-variance relationship in spatially
   variable gene detection tools.
 URL: https://github.com/kinnaryshah/spoon
 BugReports: https://github.com/kinnaryshah/spoon/issues
-Imports: SpatialExperiment, BRISC, nnSVG, scuttle, BiocParallel, Matrix, purrr, 
-  methods, SummarizedExperiment, stats, utils
+Imports: SpatialExperiment, BRISC, nnSVG, BiocParallel, Matrix,
+  methods, SummarizedExperiment, stats, utils, scuttle
 License: MIT + file LICENSE
 Encoding: UTF-8
 biocViews: 
     Spatial, SingleCell, Transcriptomics, GeneExpression, Preprocessing
 Depends:
-    BRISC,
     R (>= 4.3)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.0

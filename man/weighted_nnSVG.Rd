@@ -48,7 +48,6 @@ library(BRISC)
 library(BiocParallel)
 library(scuttle)
 library(Matrix)
-library(purrr)
 
 spe <- Visium_humanDLPFC()
 

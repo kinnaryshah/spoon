@@ -23,7 +23,6 @@
 #' @import nnSVG
 #' @import BRISC
 #' @import BiocParallel
-#' @import scuttle
 #' @export
 #'
 #' @examples

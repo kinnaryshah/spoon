@@ -20,8 +20,6 @@
 #'
 #' @import SpatialExperiment
 #' @import nnSVG
-#' @import purrr
-#' @import scuttle
 #' @import BiocParallel
 #' @import Matrix
 
@@ -35,7 +33,6 @@
 #' library(BiocParallel)
 #' library(scuttle)
 #' library(Matrix)
-#' library(purrr)
 #'
 #' spe <- Visium_humanDLPFC()
 #'

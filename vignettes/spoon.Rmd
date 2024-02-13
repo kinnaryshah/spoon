@@ -89,7 +89,6 @@ library(BRISC)
 library(BiocParallel)
 library(scuttle)
 library(Matrix)
-library(purrr)
 library(spoon)
 
 spe <- Visium_mouseCoronal()
