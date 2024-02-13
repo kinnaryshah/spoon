@@ -129,7 +129,6 @@ generate_weights <- function(input, spatial_coords = NULL,
   # run BRISC using parallelization
   # run BRISC by column of y so BRISC is run per gene
   ix <- seq_len(ncol(y))
-  #ix <- c(1,2,3)
   out_brisc <- bplapply(ix, function(i) {
     # fit model (intercept-only model if x is NULL)
     y_i <- y[ ,i]
