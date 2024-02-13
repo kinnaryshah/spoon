@@ -51,6 +51,13 @@ not accept weights, then the Delta method is leveraged to rescale the
 data and covariates by the weights. These scaled data and covariates are
 used as inputs into the desired SVG detection function.
 
+Bioconductor houses the infrastructure to store and analyze spatially
+resolved transcriptomics data for R users, including many SVG detection
+methods. This method addresses the mean-variance relationship
+confounding SVG detection, which is related to these other Bioconductor
+packages. Additionally, `spoon` is inspired by `limma::voom()` , which
+is a popular Bioconductor package.
+
 # Installation
 
 The following code will install the latest release version of the
