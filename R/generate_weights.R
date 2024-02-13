@@ -146,7 +146,7 @@ generate_weights <- function(input, spatial_coords = NULL,
                                verbose = FALSE)
     residual_i <- y_i - pred_i$prediction
 
-    return(list(pred_i$prediction, residual_i))
+    return(c(pred_i$prediction, residual_i))
   }, BPPARAM = BPPARAM)
 
   # collapse output list into matrix
@@ -154,10 +154,10 @@ generate_weights <- function(input, spatial_coords = NULL,
 
   # *Voom Variance Modelling -------------------------------------------------
 
-  mu_hat <- unname(as.matrix(as.data.frame(mat_brisc[,1])))
+  mu_hat <- t(mat_brisc[seq_len(G),seq_len(n), drop=FALSE])
   stopifnot(dim(mu_hat) == c(n, G))
 
-  s_g <- unname(as.data.frame(mat_brisc[,2])) |>
+  s_g <- as.data.frame(t(mat_brisc[seq_len(G),n+seq_len(n), drop=FALSE])) |>
     apply(MARGIN = 2,  # Column wise
           FUN = sd)
   stopifnot(length(s_g) == G)
