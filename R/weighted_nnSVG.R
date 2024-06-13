@@ -145,7 +145,9 @@ weighted_nnSVG <- function(input, spatial_coords = NULL,
     weighted_LR_stat = unlist(weighted_nnSVG_output[,"weighted_LR_stat"]),
     weighted_sigma.sq = unlist(weighted_nnSVG_output[,"weighted_sigma.sq"]),
     weighted_tau.sq = unlist(weighted_nnSVG_output[,"weighted_tau.sq"]),
-    weighted_prop_sv = unlist(weighted_nnSVG_output[,"weighted_prop_sv"])
+    weighted_prop_sv = unlist(weighted_nnSVG_output[,"weighted_prop_sv"]),
+    weighted_phi = unlist(weighted_nnSVG_output[,"weighted_phi"]),
+    weighted_padj = unlist(weighted_nnSVG_output[,"weighted_padj"])
   )
 
   res <- cbind(res,
