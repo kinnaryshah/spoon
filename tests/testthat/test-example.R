@@ -7,6 +7,6 @@ test_that("example object has correct class", {
 
 test_that("example objects have correct dimensions", {
   expect_equal(dim(spe_results), c(6, 3620))
-  expect_equal(dim(results), c(6, 6))
+  expect_equal(dim(results), c(6, 8))
 })
 
