@@ -1,4 +1,6 @@
-# spoon ![](vignettes/hex.png){width="50"}
+# spoon
+
+<img src="vignettes/hex.png" width="50"/>
 
 ## Introduction
 
