@@ -1,4 +1,10 @@
-# spoon
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# spoon ![](vignettes/hex.png){width="50"}
 
 ## Introduction
 
@@ -144,7 +150,6 @@ assay(spe, "weighted_logcounts") <- weighted_logcounts
 `assay(spe, "weighted_logcounts")`. Then, `weighted_logcounts` should be
 used as the input counts matrix and `weights` as the input covariate
 matrix in a spatially variable detection tool.
-
 
 ## Session information
 
