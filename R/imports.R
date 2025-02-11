@@ -1,0 +1,21 @@
+#' @importFrom BRISC BRISC_order
+#' @importFrom BRISC BRISC_neighbor
+#' @importFrom BRISC BRISC_estimation
+#' @importFrom BRISC BRISC_prediction
+#' @importFrom BiocParallel bplapply
+#' @importFrom BiocParallel MulticoreParam
+#' @importFrom Matrix rowMeans
+#' @importFrom SpatialExperiment spatialCoords
+#' @importFrom nnSVG nnSVG
+#' @importFrom nnSVG filter_genes
+#' @importFrom scuttle computeLibraryFactors
+#' @importFrom scuttle logNormCounts
+#' @importFrom methods is
+#' @importFrom stats predict sd smooth.spline
+#' @importFrom utils packageVersion
+#' @importFrom SummarizedExperiment `rowData<-`
+#' @importFrom SummarizedExperiment `assay<-`
+#' @importFrom SummarizedExperiment assayNames
+#' @importFrom SummarizedExperiment assays
+#' @importFrom SummarizedExperiment rowData
+NULL

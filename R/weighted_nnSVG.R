@@ -18,10 +18,7 @@
 #' @return either spe with weighted nnSVG statistics, or matrix with weighted
 #' nnSVG statistics
 #'
-#' @import SpatialExperiment
-#' @import nnSVG
-#' @import BiocParallel
-#' @import Matrix
+
 
 #' @export
 #'

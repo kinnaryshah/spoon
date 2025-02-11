@@ -19,10 +19,6 @@
 #'
 #' @return weights matrix
 #'
-#' @import SpatialExperiment
-#' @import nnSVG
-#' @import BRISC
-#' @import BiocParallel
 #' @export
 #'
 #' @examples
