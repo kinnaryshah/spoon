@@ -32,7 +32,10 @@ Depends:
     R (>= 4.4)
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    testthat, STexampleData, knitr
+    testthat,
+    STexampleData,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2
