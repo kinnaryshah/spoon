@@ -6,6 +6,7 @@ output: github_document
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/kinnaryshah/spoon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kinnaryshah/spoon/actions/workflows/R-CMD-check.yaml)
+[![BioC status](http://www.bioconductor.org/shields/build/release/bioc/spoon.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/spoon)
 <!-- badges: end -->
   
 <img src="vignettes/hex.png" width="50"/>

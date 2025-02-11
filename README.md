@@ -4,6 +4,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/kinnaryshah/spoon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kinnaryshah/spoon/actions/workflows/R-CMD-check.yaml)
+[![BioC
+status](http://www.bioconductor.org/shields/build/release/bioc/spoon.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/spoon)
 <!-- badges: end -->
 
 <img src="vignettes/hex.png" width="50"/>
@@ -404,7 +406,7 @@ sessionInfo()
     ## [8] methods   base     
     ## 
     ## other attached packages:
-    ##  [1] spoon_1.1.3                 Matrix_1.7-0               
+    ##  [1] spoon_1.3.2                 Matrix_1.7-0               
     ##  [3] scuttle_1.15.4              BiocParallel_1.39.0        
     ##  [5] BRISC_1.0.6                 pbapply_1.7-2              
     ##  [7] rdist_0.0.5                 RANN_2.6.2                 
