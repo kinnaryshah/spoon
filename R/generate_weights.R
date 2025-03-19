@@ -132,7 +132,8 @@ generate_weights <- function(input, spatial_coords = NULL,
       runtime <- system.time({
         out_i <- BRISC_estimation(coords = coords, y = y_i, x = NULL,
                                   cov.model = "exponential",
-                                  ordering = order_brisc, neighbor = nn_brisc,
+                                  ordering = order_brisc, #neighbor = nn_brisc,
+                                  n.neighbors = 10, n_omp = 1, search.type = "tree", #temp fix for R 4.5
                                   verbose = FALSE)
       })
     })
