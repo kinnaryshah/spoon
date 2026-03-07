@@ -1,0 +1,17 @@
+citHeader("spoon is described in the following publication:")
+
+citEntry(
+  entry  = "Article", 
+  title  = "Addressing the mean–variance relationship in spatially resolved transcriptomics data with spoon", 
+  author = personList(as.person("Kinnary Shah"), 
+                      as.person("Boyi Guo"), 
+                      as.person("Stephanie C. Hicks")), 
+  journal = "Biostatistics", 
+  year    = "2025", 
+  doi     = "https://doi.org/10.1093/biostatistics/kxaf012", 
+  textVersion = paste0(
+    "Shah et al. (2025), Addressing the mean–variance relationship in ", 
+    "spatially resolved transcriptomics data with spoon ", 
+    "Biostatistics"
+  )
+)
